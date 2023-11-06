@@ -2,13 +2,12 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/metatx/ERC2771Forwarder.sol";
-//import "@opengsn/contracts/src/forwarder/Forwarder.sol";
+import "hardhat/console.sol";
 
 contract V4PForwarder is ERC2771Forwarder('Vote4Photo') {
 
-    //TODO add Pausable feature of "@openzeppelin/contracts/security/Pausable.sol";
     /**
-     * @notice The trustedRelayer is the contract owner
+     * @notice The unique trustedRelayer is the contract owner
      */
     address public trustedRelayer;
 
@@ -16,20 +15,11 @@ contract V4PForwarder is ERC2771Forwarder('Vote4Photo') {
         trustedRelayer = msg.sender;
     }
 
-    // function _verifySig(
-    //     ForwardRequest calldata req,
-    //     bytes32 domainSeparator,
-    //     bytes32 requestTypeHash,
-    //     bytes calldata suffixData,
-    //     bytes calldata sig)
-    // internal
-    // override
-    // view
-    // {
-    //     // trustedRelayer can only be called from a verified Gateway where the signatures are actually checked
-    //     // note that if signature field is set, it will be verified in this Forwarder anyway
-    //     if (msg.sender != trustedRelayer || sig.length != 0) {
-    //         super._verifySig(req, domainSeparator, requestTypeHash, suffixData, sig);
-    //     }
-    // }
+    /// @inheritdoc ERC2771Forwarder
+    function _validate(
+        ForwardRequestData calldata request
+    ) override internal view virtual returns (bool isTrustedForwarder, bool active, bool signerMatch, address signer) {
+        require(msg.sender == trustedRelayer, "Unknown relayer");
+        return super._validate(request);
+    }
 }

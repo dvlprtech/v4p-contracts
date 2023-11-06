@@ -1,8 +1,12 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
+import 'solidity-docgen';
 
 const config: HardhatUserConfig = {
   solidity: "0.8.20",
+  docgen: {
+    outputDir: './doc',    
+  }, 
   networks: {
     hardhat: {
       accounts: [
@@ -20,7 +24,11 @@ const config: HardhatUserConfig = {
         },
         {
           privateKey: '0x0404040404040404040404040404040404040404040404040404040404040404',
-          balance: "0"
+          balance: "10000000000000000000000"
+        },
+        {
+          privateKey: '0x0505050505050505050505050505050505050505050505050505050505050505',
+          balance: "10000000000000000000000"
         }
       ]      
     }
