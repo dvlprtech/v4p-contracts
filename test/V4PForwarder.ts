@@ -279,8 +279,6 @@ describe("V4PForwarder", function () {
       const aliceBalance = await publicClient.getBalance({ address: alice.account.address});
       expect(aliceBalance).to.be.eq(0n);
       
-      await photoNFT.write.addMinter([alice.account.address]);
-
       await forwarder.write.execute([signedMessage]);
       const photoOwner = await photoNFT.read.ownerOf([1n]);
       expect(photoOwner.toLowerCase()).to.be.equal(alice.account.address);

@@ -30,11 +30,6 @@ contract PhotoNFT is ERC721("V4P Photos", "Photo"), ERC2771Recipient {
     uint256 private tokenCounter;
 
     /**
-     * @dev Lista de creadores de tokens permitidos, si no está en la lista no se crear un token
-     */
-    mapping(address owner => bool) private _mintersAllowed;
-
-    /**
      * Evento lanzado al crear un nuevo token
      * 
      * @param owner Propietario del token
@@ -51,7 +46,6 @@ contract PhotoNFT is ERC721("V4P Photos", "Photo"), ERC2771Recipient {
         tokenCounter = 1;
         contractOwner = msg.sender;
         ERC2771Recipient._setTrustedForwarder(trustedForwarded);
-        _mintersAllowed[contractOwner] = true;
     }
 
     /**
@@ -59,22 +53,6 @@ contract PhotoNFT is ERC721("V4P Photos", "Photo"), ERC2771Recipient {
      */
     function nextTokenId() public onlyOwner view returns (uint256) {
         return tokenCounter;
-    }
-
-    /**
-     * Añade un nuevo minter para habilitar la creación de tokens
-     * @param minter Dirección del nuevo minter
-     */
-    function addMinter(address minter) public onlyOwner {
-        _mintersAllowed[minter] = true;
-    }
-
-    /**
-     * Deshabilita un minter para la creación de tokens
-     * @param minter Dirección del minter
-     */
-    function removeMinter(address minter) public onlyOwner {
-        _mintersAllowed[minter] = false;
     }
 
     /**
@@ -133,7 +111,7 @@ contract PhotoNFT is ERC721("V4P Photos", "Photo"), ERC2771Recipient {
      * Modificador para limitar el acceso a ciertos métodos a propietarios permitidos
      */
     modifier onlyAllowedMinter() {
-        require(_mintersAllowed[_msgSender()], "Forbidden");
+        require(msg.sender == contractOwner || isTrustedForwarder(msg.sender), "Forbidden");
         _;
     }
     
