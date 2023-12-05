@@ -1,6 +1,10 @@
 {
 	"scripts": {
-		"test": "mocha -r ts-node/register modules/**/*-spec.ts"
+		"test": "hardhat test",
+		"test_localhost": "hardhat --network localhost test",
+		"test_localhost_token": "hardhat --network localhost test test/SingleToken.ts",
+		"start": "hardhat node",
+		"deploy": "hardhat run --network localhost scripts/deploy.ts"
 	},
 	"devDependencies": {
 		"@metamask/eth-sig-util": "^7.0.0",

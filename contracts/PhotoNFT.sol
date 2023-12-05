@@ -60,8 +60,9 @@ contract PhotoNFT is ERC721("V4P Photos", "Photo"), ERC2771Recipient {
      * @param newTokenURI URI de la foto asociada
      */
     function mintPhoto(string memory newTokenURI) external onlyAllowedMinter {
-        //console.log('>>> mintPhoto');
-        uint256 tokenId = tokenCounter;
+        console.log('>>> mintPhoto, sender: ', _msgSender(), ', contract owner:', contractOwner);
+        
+        uint256 tokenId = tokenCounter++;
         _mint(_msgSender(), tokenId);
         tokenURIs[tokenId] = newTokenURI;
         //console.log('>>> tokenId: ', tokenId);
