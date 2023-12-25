@@ -1,6 +1,9 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox-viem";
 import 'solidity-docgen';
+import dotenv from 'dotenv';
+import { sepolia } from "viem/chains";
+dotenv.config();
 
 const config: HardhatUserConfig = {
   solidity: "0.8.20",
@@ -8,6 +11,11 @@ const config: HardhatUserConfig = {
     outputDir: './doc',    
   }, 
   networks: {
+    sepolia: {
+      chainId: sepolia.id,
+      url: sepolia.rpcUrls.default.http[0],
+      accounts: [process.env.OWNER_PRIVATE_KEY!]
+    },
     hardhat: {
       accounts: [
         { /* Owner */
