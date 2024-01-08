@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@opengsn/contracts/src/ERC2771Recipient.sol";
 
 // Uncomment this line to use console.log
-import "hardhat/console.sol";
+//import "hardhat/console.sol";
 
 /**
  * @title PhotoNFT 
@@ -60,7 +60,7 @@ contract PhotoNFT is ERC721("V4P Photos", "Photo"), ERC2771Recipient {
      * @param newTokenURI URI de la foto asociada
      */
     function mintPhoto(string memory newTokenURI) external onlyAllowedMinter {
-        console.log('>>> mintPhoto, sender: ', _msgSender(), ', contract owner:', contractOwner);
+        //console.log('>>> mintPhoto, sender: ', _msgSender(), ', contract owner:', contractOwner);
         
         uint256 tokenId = tokenCounter++;
         _mint(_msgSender(), tokenId);
@@ -85,11 +85,17 @@ contract PhotoNFT is ERC721("V4P Photos", "Photo"), ERC2771Recipient {
      * @param tokenId ID del token a transferir
      */
     function transferToken(address to, uint256 tokenId) external {
-        //console.log('>>> transferToken');
-        //console.log('>>> ownerOf(tokenId):', ownerOf(tokenId));
-        //console.log('>>> _msgSender():', _msgSender());
         require(ownerOf(tokenId) == _msgSender(), "Not the owner of the token");
         _transfer(ownerOf(tokenId), to, tokenId);
+    }
+
+    /**
+     * Quema (elimina) el token especificado
+     * @param tokenId ID del token a quemar
+     */
+    function burn(uint256 tokenId) external {
+        require(ownerOf(tokenId) == _msgSender(), "Not the owner of the token");
+        _burn(tokenId);
     }
 
     /**

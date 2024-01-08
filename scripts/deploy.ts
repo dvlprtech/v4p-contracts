@@ -3,18 +3,19 @@ import hre from "hardhat";
 
 async function deploy() {
   if (!['hardhat', 'sepolia', 'localhost'].includes(hre.network.name)) {
-    throw new Error("This script should only be run on hardhat");
+    throw new Error("This script should only be run on hardhat/sepolia network");
   }
   const [walletClient] = await hre.viem.getWalletClients();
 
   console.log(`Connected to chain ID: ${await walletClient.getChainId()}, Network: ${walletClient.chain.name}, Currency: ${walletClient.chain.nativeCurrency.symbol}`);
+  hre.viem.
   const forwarder = await hre.viem.deployContract("V4PForwarder", [], {});
-  const photoNFT = await hre.viem.deployContract("PhotoNFT", [forwarder.address], {});
-  //await forwarder.w
-  const trustedRelayer = await forwarder.read.trustedRelayer();
-  const trustedForwarder = await photoNFT.read.getTrustedForwarder();
 
+  const trustedRelayer = await forwarder.read.trustedRelayer();
   console.log(`Forwarder (${forwarder.address}) deployed for trustedRelayer: ${trustedRelayer}`);
+
+  const photoNFT = await hre.viem.deployContract("PhotoNFT", [forwarder.address], {});
+  const trustedForwarder = await photoNFT.read.getTrustedForwarder();
   console.log(`PhotoNFT (${photoNFT.address}) deployed for trustedRelayer (forwarder): ${trustedForwarder}`);
 }
 
