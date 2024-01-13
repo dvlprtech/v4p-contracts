@@ -7,8 +7,7 @@ async function deploy() {
   }
   const [walletClient] = await hre.viem.getWalletClients();
 
-  console.log(`Connected to chain ID: ${await walletClient.getChainId()}, Network: ${walletClient.chain.name}, Currency: ${walletClient.chain.nativeCurrency.symbol}`);
-  hre.viem.
+  console.log(`Connected to chain ID: ${await walletClient.getChainId()}, Network: ${walletClient.chain.name}, Currency: ${walletClient.chain.nativeCurrency.symbol}`);  
   const forwarder = await hre.viem.deployContract("V4PForwarder", [], {});
 
   const trustedRelayer = await forwarder.read.trustedRelayer();
